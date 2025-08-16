@@ -10,4 +10,4 @@ demo = gr.Interface(
     outputs=["text"],
 )
 
-demo.launch()
+demo.launch(share=True)
