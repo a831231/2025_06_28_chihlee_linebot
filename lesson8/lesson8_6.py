@@ -30,7 +30,12 @@ with gr.Blocks() as demo:
         # 在這裡處理用戶輸入的訊息
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents=[message]
+            contents=[message],
+            config=genai.types.GenerateContentConfig(
+            temperature=1,
+            top_k=40,
+            top_p=1
+            )
         )
         return response.text
 
