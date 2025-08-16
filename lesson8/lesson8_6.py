@@ -1,4 +1,7 @@
 import gradio as gr
+from google import genai
+
+client = genai.Client()
 
 #建立一個gradio的Block的架構
 with gr.Blocks() as demo:
@@ -10,9 +13,9 @@ with gr.Blocks() as demo:
     with gr.Accordion("可以點選以下常用問題", open=True):
         gr.Examples(
             examples=[
-                "你們的公司在哪裡？",
-                "你們的產品有哪些？",
-                "你們的服務時間是什麼時候？"
+                "台灣首都在哪裡？",
+                "台灣人口多少？",
+                "台灣面積有多大？"
             ],
             inputs=input_text
         )
@@ -24,7 +27,11 @@ with gr.Blocks() as demo:
 
     @input_text.submit(inputs=[input_text],outputs=[output_text])
     def respond(message):
-        # 模擬機器人回覆
-        return "這是機器人的回覆"
+        # 在這裡處理用戶輸入的訊息
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[message]
+        )
+        return response.text
 
 demo.launch()
