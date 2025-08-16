@@ -2,3 +2,4 @@ google-genai
 python-dotenv
 ipywidgets
 Pillow
+gradio
