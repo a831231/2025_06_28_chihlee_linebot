@@ -1,6 +1,10 @@
-from flask import Flask,render_template_string
-
+from flask import Flask,render_template_string, request, jsonify
+from google import genai
+from dotenv import load_dotenv
+import os
+load_dotenv()
 app = Flask(__name__)
+client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
 
 @app.route("/")
 def index():
@@ -58,3 +62,18 @@ def index():
     </html>
     '''
     return render_template_string(html)
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json()
+    question = data.get('question', '').strip()
+    if not question:
+        return jsonify({'error': '未輸入問題'}), 400
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash", contents=f"{question},回應請輸出成為html格式,請記得您的名字是`致理小助手`"
+        )
+        html_format = response.text.replace("```html","").replace("```","")
+        return jsonify({'html': html_format})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
