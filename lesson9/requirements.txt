@@ -2,3 +2,5 @@ google-genai
 python-dotenv
 Flask
 gunicorn
+line-bot-sdk
+requests
